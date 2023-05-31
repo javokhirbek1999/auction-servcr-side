@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-t!h4)d)f3r1(i^lp@k&=b4re*k21#&j^oii*k+yd8_g(&4bomo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "0.0.0.0:8000"]
 
 
 # Application definition
@@ -126,7 +126,7 @@ MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CRONJOBS = [
-('*/2 * * * *', 'apps.cron.checkExpiredAuctions')
+('*/2 * * * *', 'apps.cron.checkExpiredAuctions'),
 ]
 
 # Default primary key field type

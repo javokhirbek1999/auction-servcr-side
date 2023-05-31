@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  appserver:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      PORT: 8000
+      HOST: 0.0.0.0
+      DJANGO_DEBUG: "True"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: /start.sh
