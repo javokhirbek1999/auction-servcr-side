@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
 from .models.user import User
+from .models.auction import Category, Item, Bid
 
 
 
@@ -23,3 +24,6 @@ class UserAdmin(UserAdmin):
     )
 
 
+admin.site.register(Category)
+admin.site.register(Item)
+admin.site.register(Bid)
