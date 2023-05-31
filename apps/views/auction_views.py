@@ -25,7 +25,7 @@ class AuctionView(generics.ListCreateAPIView):
     queryset = Item.objects.all()
 
 
-class BidsView(generics.ListCreateAPIView):
+class AllBidsView(generics.ListCreateAPIView):
 
     """
     API View for Bid Model
@@ -33,4 +33,17 @@ class BidsView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = BidSerializer
     queryset = Bid.objects.all()
+
+
+class BidsView(generics.ListAPIView):
+
+    """
+    API VIew for Bid Model
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = BidSerializer
+
+    def get_queryset(self):
+        return Bid.objects.filter(item__id=self.kwargs.get('pk')).order_by('-bidPrice')
+
 

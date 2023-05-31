@@ -35,7 +35,7 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     price = models.DecimalField(decimal_places=2, max_digits=999)
     currency = models.CharField(max_length=3, choices=currencies)
-    endDate = models.DateTimeField(max_length=999)
+    endDate = models.DateTimeField()
 
 
     def __str__(self) -> str:
@@ -64,7 +64,17 @@ class Bid(models.Model):
     def __str__(self) -> str:
         return f'{self.item.id} - {self.item.name} | {self.bidder.user_name} | {self.bidPrice} | {self.bidDate} | {self.status}'
 
-
+    @property
+    def get_item_details(self):
+        return {
+            'name': self.item.name,
+            'description': self.item.description,
+            'thumbnail': self.item.thumbnail.url,
+            'category': self.item.category.name,
+            'price': self.item.price,
+            'currency': self.item.currency,
+            'endDate': self.item.endDate
+        }
     
     @property
     def get_bidder_details(self):
