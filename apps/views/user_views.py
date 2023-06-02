@@ -57,3 +57,25 @@ class AllUsers(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = user_serializer.UserSerializer
     queryset = get_user_model().objects.all()
+
+
+class AuthTokenAPIView(ObtainAuthToken):
+
+    """API view for obtaining authentication token"""
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = user_serializer.AuthTokenSerializer
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+
+    def post(self, request, *args, **kwargs):
+        
+        serializer = user_serializer.AuthTokenSerializer(data=request.data, context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.user_name,
+            'email': user.email
+        })

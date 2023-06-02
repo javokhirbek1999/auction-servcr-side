@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-t!h4)d)f3r1(i^lp@k&=b4re*k21#&j^oii*k+yd8_g(&4bomo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "0.0.0.0:8000"]
+ALLOWED_HOSTS = ["*", "0.0.0.0:8000", "127.0.0.1", "127.0.0.1:8000", "localhost", "localhost:8000"]
 
 
 # Application definition
@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders',
     'django_crontab',
     'rest_framework',
+    'rest_framework.authtoken',
 
     'apps',
 ]
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,6 +88,27 @@ DATABASES = {
     }
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    "http://192.168.43.21:3000",
+    'http://192.168.1.107:3000',
+    'http://192.168.43.21:3000',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+CSRF_COOKIE_NAME = "csrftoken"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -134,4 +158,6 @@ CRONJOBS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'apps.User'
+
+DEFAULT_DOMAIN = 'https://{}'.format('localhost:8000')
 

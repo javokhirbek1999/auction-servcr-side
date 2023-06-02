@@ -12,4 +12,5 @@ urlpatterns = [
     path('user/<str:pk>', user_views.UpdateDeleteUserAPIView.as_view(), name='user'),
     path('admin/<str:pk>', user_views.UpdateDeleteAdminUserAPIView.as_view(), name='admin-user'),
     path('all/', user_views.AllUsers.as_view(), name='all-users'),
+    path('token/', user_views.AuthTokenAPIView.as_view(), name='token'),
 ]
