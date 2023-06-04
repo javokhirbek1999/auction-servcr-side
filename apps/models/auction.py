@@ -31,7 +31,7 @@ class Item(models.Model):
     auctioneer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=300)
     description = models.TextField()
-    thumbnail = models.ImageField(upload_to='auction/images/')
+    thumbnail = models.URLField(default='https://ingoodcompany.asia/images/products_attr_img/matrix/default.png')
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     price = models.DecimalField(decimal_places=2, max_digits=999)
     currency = models.CharField(max_length=3, choices=currencies)

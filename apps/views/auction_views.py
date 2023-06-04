@@ -25,6 +25,19 @@ class AuctionView(generics.ListCreateAPIView):
     queryset = Item.objects.all()
 
 
+class UserAuctions(generics.ListCreateAPIView):
+
+    """
+    API View for Managing auctions
+    """
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ItemSerializer
+    
+    def get_queryset(self):
+        
+        return Item.objects.filter(auctioneer__user_name=self.kwargs.get('username'))
+
+
 class AllBidsView(generics.ListCreateAPIView):
 
     """
