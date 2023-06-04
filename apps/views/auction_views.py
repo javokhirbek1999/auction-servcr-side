@@ -14,13 +14,16 @@ class CategoryView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 class AuctionView(generics.ListCreateAPIView):
 
     """
     API View for Auction Model
     """
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.AllowAny,)
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
 
@@ -34,8 +37,21 @@ class UserAuctions(generics.ListCreateAPIView):
     serializer_class = ItemSerializer
     
     def get_queryset(self):
-        
         return Item.objects.filter(auctioneer__user_name=self.kwargs.get('username'))
+
+
+class SingleUserAuction(generics.RetrieveUpdateDestroyAPIView):
+
+    """
+    API View for single auction view
+    """
+
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ItemSerializer
+
+    def get_object(self):
+        return Item.objects.get(auctioneer__user_name=self.kwargs.get('username'),id=self.kwargs.get('pk'))
+
 
 
 class AllBidsView(generics.ListCreateAPIView):

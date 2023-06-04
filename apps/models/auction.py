@@ -69,12 +69,13 @@ class Bid(models.Model):
         return {
             'name': self.item.name,
             'description': self.item.description,
-            'thumbnail': self.item.thumbnail.url,
+            'thumbnail': self.item.thumbnail,
             'category': self.item.category.name,
             'price': self.item.price,
             'currency': self.item.currency,
             'endDate': self.item.endDate
         }
+
     
     @property
     def get_bidder_details(self):

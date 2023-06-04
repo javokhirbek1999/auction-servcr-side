@@ -28,9 +28,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('id', 'auctioneer', 'get_auctioneer_details', 'name', 'description', 'thumbnail', 'category', 'price', 'currency', 'endDate')
-        extra_kwargs = {
-            'auctioneer': {'write_only':True},
-        }
+
 
     def create(self, validated_data):
         return super().create(validated_data)   
@@ -45,15 +43,13 @@ class BidSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bid
-        fields = ('id', 'get_item_details', 'get_bidder_details', 'item', 'bidder', 'bidPrice', 'bidDate', 'status')
+        fields = ('id', 'get_bidder_details', 'get_item_details', 'item', 'bidder', 'bidPrice', 'bidDate', 'status')
         extra_kwargs = {
             'item': {'write_only':True,},
             'bidder': {'write_only':True,},
+            'get_item_details': {'read_only': True},
         }
 
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
     def validate(self, attrs):
         itemPrice = attrs.get('item').price
@@ -66,6 +62,10 @@ class BidSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_('Bid price must be greater than or equal to the item price'))
         
         return attrs
+    
+    def create(self, validated_data):
+        return super().create(validated_data)
+
     
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
