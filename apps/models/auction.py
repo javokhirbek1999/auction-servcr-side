@@ -15,6 +15,12 @@ bidStatuses = (
     ('Cancelled', 'Cancelled'),
 )
 
+auctionStatuses = (
+    ('Sold', 'Sold'),
+    ('Cancelled','Cancelled'),
+    ('In-auction','In-auction')
+)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -27,6 +33,7 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.name
 
+
 class Item(models.Model):
     auctioneer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=300)
@@ -36,6 +43,7 @@ class Item(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=999)
     currency = models.CharField(max_length=3, choices=currencies)
     endDate = models.DateTimeField()
+    status = models.CharField(max_length=100, choices=auctionStatuses, default='In-auction')
 
 
     def __str__(self) -> str:

@@ -27,7 +27,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id', 'auctioneer', 'get_auctioneer_details', 'name', 'description', 'thumbnail', 'category', 'price', 'currency', 'endDate')
+        fields = ('id', 'auctioneer', 'get_auctioneer_details', 'name', 'description', 'thumbnail', 'category', 'price', 'currency', 'endDate', 'status')
 
 
     def create(self, validated_data):

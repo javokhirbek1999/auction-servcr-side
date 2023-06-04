@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 
-from ..permissions.auction_permissions import IsAdminOrReadOnly
+from ..permissions.auction_permissions import IsAdminOrReadOnly, IsOwner
 from ..serializers.auction_serializer import CategorySerializer, ItemSerializer, BidSerializer
 from ..models.auction import Category, Item, Bid
 
@@ -75,4 +75,27 @@ class BidsView(generics.ListAPIView):
     def get_queryset(self):
         return Bid.objects.filter(item__id=self.kwargs.get('pk')).order_by('-bidPrice')
 
+
+class SellTheItem(generics.RetrieveUpdateAPIView):
+
+    """
+    API View for selling the in-auction items
+    """
+
+    permission_classes = (IsOwner,)
+    serializer_class = ItemSerializer
+    
+    def get_object(self):
+        return Item.objects.get(id=self.kwargs.get('pk'), auctioneer__user_name=self.kwargs.get('username'))
+    
+
+    def update(self, request, *args, **kwargs):
+
+        self.item = self.get_object()
+
+        if Bid.objects.filter(item__id=self.item.id).count() > 0:
+            self.item.status = 'Sold'
+            self.item.save()
+
+        return super().update(request, *args, **kwargs)
 
