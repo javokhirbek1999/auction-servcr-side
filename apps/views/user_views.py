@@ -39,40 +39,7 @@ class UpdateDeleteUserAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         return get_user_model().objects.get(user_name=self.kwargs.get('pk'))
     
-    # def update(self, request, *args, **kwargs):
-
-    #     self.user = self.get_object()   
-        
-    #     if self.user is None:
-    #         return Response({
-    #             'status': 'failed',
-    #             'code': status.HTTP_404_NOT_FOUND,
-    #             'message': 'User does not exist'
-    #         }, status=status.HTTP_404_NOT_FOUND)
-
-    #     user_serializer = self.get_serializer(data=request.data)
-
-        
-    #     if user_serializer.is_valid():
-    #         print('IsValid')
-    #         print(user_serializer.data)
-
-    #         if not self.user.check_password(user_serializer.data.get('password')):
-    #             return Response({"password": ["Wrong password"]}, status=status.HTTP_400_BAD_REQUEST)
-
-            
-    #         self.user.set_password(user_serializer.data.get('password'))
-    #         self.user.save()
-
-    #         return Response({
-    #             'status': 'success',
-    #             'code': status.HTTP_200_OK,
-    #             'message': 'Update successful',
-    #             'data': []
-    #         })
-        
-
-    #     return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   
 
 class UpdateDeleteAdminUserAPIView(generics.RetrieveUpdateDestroyAPIView):
 

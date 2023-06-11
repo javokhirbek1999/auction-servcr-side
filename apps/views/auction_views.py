@@ -33,11 +33,11 @@ class UserAuctions(generics.ListCreateAPIView):
     """
     API View for Managing auctions
     """
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = ItemSerializer
     
     def get_queryset(self):
-        return Item.objects.filter(auctioneer__user_name=self.kwargs.get('username'))
+        return Item.objects.filter(owner__user_name=self.kwargs.get('username'))
 
 
 class SingleUserAuction(generics.RetrieveUpdateDestroyAPIView):
@@ -46,11 +46,11 @@ class SingleUserAuction(generics.RetrieveUpdateDestroyAPIView):
     API View for single auction view
     """
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = ItemSerializer
 
     def get_object(self):
-        return Item.objects.get(auctioneer__user_name=self.kwargs.get('username'),id=self.kwargs.get('pk'))
+        return Item.objects.get(owner__user_name=self.kwargs.get('username'),id=self.kwargs.get('pk'))
 
 
 
@@ -86,14 +86,17 @@ class SellTheItem(generics.RetrieveUpdateAPIView):
     serializer_class = ItemSerializer
     
     def get_object(self):
-        return Item.objects.get(id=self.kwargs.get('pk'), auctioneer__user_name=self.kwargs.get('username'))
+        return Item.objects.get(id=self.kwargs.get('pk'), owner__user_name=self.kwargs.get('username'))
     
 
     def update(self, request, *args, **kwargs):
 
         self.item = self.get_object()
 
-        if Bid.objects.filter(item__id=self.item.id).count() > 0:
+        allBids = Bid.objects.filter(item__id=self.item.id).order_by('-bidPrice')
+
+        if allBids.count() > 0 and allBids.first().bidPrice >= self.item.price:
+            self.item.owner = allBids.first().bidder
             self.item.status = 'Sold'
             self.item.save()
 

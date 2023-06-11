@@ -35,7 +35,7 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    auctioneer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=300)
     description = models.TextField()
     thumbnail = models.URLField(default='https://ingoodcompany.asia/images/products_attr_img/matrix/default.png')
@@ -47,18 +47,18 @@ class Item(models.Model):
 
 
     def __str__(self) -> str:
-        return f'{self.id}-{self.name} | {self.price} {self.currency} | {self.endDate} | {self.auctioneer.user_name}'
+        return f'{self.id}-{self.name} | {self.price} {self.currency} | {self.endDate} | {self.owner.user_name}'
 
     @property
-    def get_auctioneer_details(self):
+    def get_owner_details(self):
 
         return {
-            'first_name': self.auctioneer.first_name,
-            'last_name': self.auctioneer.last_name,
-            'user_name': self.auctioneer.user_name,
-            'email': self.auctioneer.email,
-            'date_joined': self.auctioneer.date_joined,
-            'date_updated': self.auctioneer.date_updated
+            'first_name': self.owner.first_name,
+            'last_name': self.owner.last_name,
+            'user_name': self.owner.user_name,
+            'email': self.owner.email,
+            'date_joined': self.owner.date_joined,
+            'date_updated': self.owner.date_updated
         }
 
 

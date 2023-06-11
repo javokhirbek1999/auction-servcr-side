@@ -14,8 +14,10 @@ def checkExpiredAuctions():
         # Sell the item for the highest bid if the highest bid's price is equal to or more than the item's price
         allBidsForThisAuction = Bid.objects.filter(item__id=auction.id).order_by('-bidPrice')
 
-        if allBidsForThisAuction.get().bidPrice >= auction.price:
+        if allBidsForThisAuction.first().bidPrice >= auction.price:
+            auction.owner = allBidsForThisAuction.first().bidder
             auction.status = 'Sold'
+            auction.save()
         else:
             auction.status = 'Cancelled'
             auction.delete()
